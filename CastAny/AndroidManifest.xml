@@ -17,9 +17,9 @@
         android:allowBackup="true"
         android:icon="@drawable/castsampleappicon"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" >
+        android:theme="@android:style/Theme.Holo.Light" >
         <activity
-            android:name="com.qiusheng.cast.CastSampleActivity"
+            android:name="com.qiusheng.cast.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" 
             android:launchMode="singleTask">
@@ -28,6 +28,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.qiusheng.cast.HttpInputActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.qiusheng.cast.HttpActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.qiusheng.cast.CastActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.qiusheng.cast.YoukuActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
         </activity>
     </application>
 

@@ -22,7 +22,7 @@
     android:orientation="vertical"
     android:paddingLeft="3dp"
     android:paddingRight="3dp"
-    tools:context=".CastSampleActivity" >
+    tools:context=".CastActivity" >
 
     <include
         android:id="@+id/title_bar"
@@ -46,7 +46,7 @@
         android:gravity="center"
         android:background="@drawable/border"
         android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textSize="12sp" />
 
     <include
         android:id="@+id/media_buttons"

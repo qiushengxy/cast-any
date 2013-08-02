@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <Button
+        android:id="@+id/button_http"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="HTTP Server with directories and files listed" />
+
+    <Button
+        android:id="@+id/button_youku"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_http"
+        android:layout_marginTop="30dp"
+        android:text="Youku" />
+
+    <Button
+        android:id="@+id/button_tudou"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_youku"
+        android:layout_marginTop="30dp"
+        android:text="Tudou" />
+    
+    <Button
+        android:id="@+id/button_sohu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_tudou"
+        android:layout_marginTop="30dp"
+        android:text="Sohu" />
+
+</RelativeLayout>

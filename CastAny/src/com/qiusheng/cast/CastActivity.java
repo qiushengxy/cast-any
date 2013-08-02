@@ -18,7 +18,20 @@ package com.qiusheng.cast;
 
 import java.io.IOException;
 
-import com.qiusheng.cast.R;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.MediaRouteButton;
+import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
+import android.support.v7.media.MediaRouter.RouteInfo;
+import android.text.Html;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import com.google.cast.ApplicationChannel;
 import com.google.cast.ApplicationMetadata;
 import com.google.cast.ApplicationSession;
@@ -33,26 +46,13 @@ import com.google.cast.MediaRouteStateChangeListener;
 import com.google.cast.SessionError;
 import com.qiusheng.cast.mediaroutedialog.SampleMediaRouteDialogFactory;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.MediaRouteButton;
-import android.support.v7.media.MediaRouteSelector;
-import android.support.v7.media.MediaRouter;
-import android.support.v7.media.MediaRouter.RouteInfo;
-import android.text.Html;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
 /***
  * An activity that plays a chosen sample video on a Cast device and exposes playback and volume
  * controls in the UI.
  */
-public class CastSampleActivity extends FragmentActivity implements MediaRouteAdapter {
+public class CastActivity extends FragmentActivity implements MediaRouteAdapter {
 
-    private static final String TAG = CastSampleActivity.class.getSimpleName();
+    private static final String TAG = CastActivity.class.getSimpleName();
     
     public static final boolean ENABLE_LOGV = true;
 
@@ -75,7 +75,6 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
     private MediaRouter mMediaRouter;
     private MediaRouteSelector mMediaRouteSelector;
     private MediaRouter.Callback mMediaRouterCallback;
-    private MediaSelectionDialog mMediaSelectionDialog;
     private MediaProtocolCommand mStatus;
 
     private ImageButton mPlayPauseButton;
@@ -87,6 +86,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
 
     private SampleMediaRouteDialogFactory mDialogFactory;
 
+    private Thread myThread;
     /**
      * Initializes MediaRouter information and prepares for Cast device detection upon creating
      * this activity.
@@ -95,7 +95,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
     protected void onCreate(Bundle savedInstanceState) {
         logVIfEnabled(TAG, "onCreate called");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cast_sample);
+        setContentView(R.layout.activity_cast);
 
         mCastContext = new CastContext(getApplicationContext());
         mMedia = new CastMedia(null, null);
@@ -116,17 +116,24 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
         mStatusText = (TextView) findViewById(R.id.play_status_text);
         mCurrentlyPlaying = (TextView) findViewById(R.id.currently_playing);
         mCurrentlyPlaying.setText(getString(R.string.tap_to_select));
-        mMediaSelectionDialog = new MediaSelectionDialog(this);
 
         mPlayPauseButton = (ImageButton) findViewById(R.id.play_pause_button);
         mStopButton = (ImageButton) findViewById(R.id.stop_button);
         initButtons();
 
-        Thread myThread = null;
+        myThread = null;
         Runnable runnable = new StatusRunner();
         myThread = new Thread(runnable);
         logVIfEnabled(TAG, "Starting statusRunner thread");
         myThread.start();
+        
+        
+
+        Intent intent = getIntent();
+        String url = intent.getStringExtra("MEDIA_URL");
+        if (url.length()>0) {
+            this.mediaSelected(new CastMedia(url, url));
+        }
     }
 
     /**
@@ -151,10 +158,8 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
         mCurrentlyPlaying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logVIfEnabled(TAG, "Selecting Media");
-                mMediaSelectionDialog.setTitle(getResources().getString(
-                        R.string.medial_dialog_title));
-                mMediaSelectionDialog.show();
+                // go back to http activity
+                finish();
             }
         });
     }
@@ -305,7 +310,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
                             onSetVolume(currentVolume + VOLUME_INCREMENT);
                         }
                     } else {
-                        Log.e(TAG, "dispatchKeyEvent - volume up - mMPMS==null");
+                        Log.e(TAG, "dispatchKeyEvent - volume up - mMessageStream==null");
                     }
                 }
 
@@ -321,7 +326,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
                             onSetVolume(currentVolume - VOLUME_INCREMENT);
                         }
                     } else {
-                        Log.e(TAG, "dispatchKeyEvent - volume down - mMPMS==null");
+                        Log.e(TAG, "dispatchKeyEvent - volume down - mMessageStream==null");
                     }
                 }
                 return true;
@@ -361,6 +366,9 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
             }
         }
         mSession = null;
+        
+        myThread.interrupt();
+        
         super.onDestroy();
     }
 
@@ -400,6 +408,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
      * Starts a new video playback session with the current CastContext and selected device.
      */
     private void openSession() {
+        logVIfEnabled(TAG, "openSession");
         mSession = new ApplicationSession(mCastContext, mSelectedDevice);
 
         // TODO: The below lines allow you to specify either that your application uses the default
@@ -480,7 +489,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
                     logVIfEnabled(TAG, "Load completed - starting playback");
                     mPlayPauseButton.setImageResource(R.drawable.pause_button);
                     mPlayButtonShowsPlay = false;
-                    onSetVolume(0.5);
+                    onSetVolume(0.9);
                 }
 
                 @Override
@@ -500,6 +509,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
      * Stores and attempts to load the passed piece of media.
      */
     protected void mediaSelected(CastMedia media) {
+        logVIfEnabled(TAG, "mediaSelected");
         this.mMedia = media;
         updateCurrentlyPlaying();
         if (mMessageStream != null) {
@@ -511,6 +521,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
      * Updates the status of the currently playing video in the dedicated message view.
      */
     public void updateStatus() {
+        logVIfEnabled(TAG, "updateStatus");
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -556,6 +567,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
      * Updates a view with the title of the currently playing media.
      */
     protected void updateCurrentlyPlaying() {
+        logVIfEnabled(TAG, "updateCurrentlyPlaying");
         String playing = "";
         if (mMedia.getTitle() != null) {
             playing = "Media Selected: " + mMedia.getTitle();
@@ -567,10 +579,7 @@ public class CastSampleActivity extends FragmentActivity implements MediaRouteAd
             }
             mCurrentlyPlaying.setText(Html.fromHtml(playing));
         } else {
-            String castString = "<font color=#FF0000>";
-            castString += getResources().getString(R.string.tap_to_select);
-            castString += "</font>";
-            mCurrentlyPlaying.setText(Html.fromHtml(castString));
+            mCurrentlyPlaying.setText("No media selected");
         }
     }
 
