@@ -22,8 +22,9 @@ import android.support.v7.app.MediaRouteControllerDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+
+import com.qiusheng.cast.CastActivity;
 import com.qiusheng.cast.R;
-import com.qiusheng.cast.CastSampleActivity;
 
 /**
  * A sample class which demonstrates handling of basic playback controls. Note that this dialog
@@ -32,11 +33,11 @@ import com.qiusheng.cast.CastSampleActivity;
 public class SampleMediaRouteControllerDialog extends MediaRouteControllerDialog
         implements View.OnClickListener {
 
-    private static final String TAG = SampleMediaRouteControllerDialog.class.getSimpleName();
+    //private static final String TAG = SampleMediaRouteControllerDialog.class.getSimpleName();
     private static final int SEEK_FORWARD = 1;
     private static final int SEEK_BACK = 2;
     
-    private CastSampleActivity mActivity;
+    private CastActivity mActivity;
     private Button mBackButton;
     private Button mMuteButton;
     private Button mForwardButton;
@@ -63,7 +64,7 @@ public class SampleMediaRouteControllerDialog extends MediaRouteControllerDialog
         mForwardButton = (Button) controls.findViewById(R.id.skip_forward_button);
         mForwardButton.setOnClickListener(this);
 
-        mActivity = (CastSampleActivity) getOwnerActivity();
+        mActivity = (CastActivity) getOwnerActivity();
         return controls;
     }
     

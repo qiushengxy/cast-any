@@ -24,7 +24,7 @@ import android.support.v7.app.MediaRouteDialogFactory;
  */
 public class SampleMediaRouteDialogFactory extends MediaRouteDialogFactory {
     
-    private static final String TAG = SampleMediaRouteDialogFactory.class.getSimpleName();
+    //private static final String TAG = SampleMediaRouteDialogFactory.class.getSimpleName();
     
     private static final SampleMediaRouteDialogFactory sDefault = new SampleMediaRouteDialogFactory();
 

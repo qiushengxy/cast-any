@@ -26,7 +26,7 @@ import android.support.v7.app.MediaRouteControllerDialogFragment;
  */
 public class SampleMediaRouteControllerDialogFragment extends MediaRouteControllerDialogFragment {
 
-    private static final String TAG = SampleMediaRouteControllerDialogFragment.class.getSimpleName();
+    //private static final String TAG = SampleMediaRouteControllerDialogFragment.class.getSimpleName();
 
     private SampleMediaRouteControllerDialog mSampleControllerDialog;
 
