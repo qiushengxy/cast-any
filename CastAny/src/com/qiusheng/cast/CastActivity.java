@@ -66,7 +66,7 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     private boolean mVideoIsStopped = false;
 
     private CastContext mCastContext = null;
-    private CastDevice mSelectedDevice;
+    private static CastDevice mSelectedDevice;
     private CastMedia mMedia;
     private ContentMetadata mMetaData;
     private ApplicationSession mSession;
@@ -132,6 +132,7 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         Intent intent = getIntent();
         String url = intent.getStringExtra("MEDIA_URL");
         if (url.length()>0) {
+        	logVIfEnabled(TAG, "Passed in url=" + url);
             this.mediaSelected(new CastMedia(url, url));
         }
     }
@@ -367,7 +368,8 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         }
         mSession = null;
         
-        myThread.interrupt();
+        if (myThread.isAlive())
+        	myThread.interrupt();
         
         super.onDestroy();
     }
@@ -512,6 +514,9 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         logVIfEnabled(TAG, "mediaSelected");
         this.mMedia = media;
         updateCurrentlyPlaying();
+        if (mSelectedDevice!=null) {
+        	openSession();
+        }
         if (mMessageStream != null) {
             loadMedia();
         }
@@ -521,7 +526,7 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
      * Updates the status of the currently playing video in the dedicated message view.
      */
     public void updateStatus() {
-        logVIfEnabled(TAG, "updateStatus");
+        //logVIfEnabled(TAG, "updateStatus");
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -567,7 +572,7 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
      * Updates a view with the title of the currently playing media.
      */
     protected void updateCurrentlyPlaying() {
-        logVIfEnabled(TAG, "updateCurrentlyPlaying");
+        //logVIfEnabled(TAG, "updateCurrentlyPlaying");
         String playing = "";
         if (mMedia.getTitle() != null) {
             playing = "Media Selected: " + mMedia.getTitle();
