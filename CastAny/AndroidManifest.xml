@@ -45,7 +45,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.qiusheng.cast.YoukuActivity"
+            android:name="com.qiusheng.cast.WebActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>

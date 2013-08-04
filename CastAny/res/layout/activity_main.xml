@@ -10,13 +10,21 @@
         android:text="HTTP Server with directories and files listed" />
 
     <Button
-        android:id="@+id/button_youku"
+        android:id="@+id/button_qq"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/button_http"
         android:layout_marginTop="30dp"
-        android:text="Youku" />
+        android:text="QQ" />
 
+    <Button
+        android:id="@+id/button_youku"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_qq"
+        android:layout_marginTop="30dp"
+        android:text="Youku" />
+        
     <Button
         android:id="@+id/button_tudou"
         android:layout_width="fill_parent"

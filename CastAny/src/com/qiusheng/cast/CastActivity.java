@@ -17,6 +17,7 @@
 package com.qiusheng.cast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.cast.ApplicationChannel;
 import com.google.cast.ApplicationMetadata;
@@ -40,6 +42,7 @@ import com.google.cast.CastDevice;
 import com.google.cast.ContentMetadata;
 import com.google.cast.MediaProtocolCommand;
 import com.google.cast.MediaProtocolMessageStream;
+import com.google.cast.MediaProtocolMessageStream.PlayerState;
 import com.google.cast.MediaRouteAdapter;
 import com.google.cast.MediaRouteHelper;
 import com.google.cast.MediaRouteStateChangeListener;
@@ -87,6 +90,11 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     private SampleMediaRouteDialogFactory mDialogFactory;
 
     private Thread myThread;
+
+    private ArrayList<String> urls = new ArrayList<String>();
+    private int nextUrl = 0;
+    private CastActivity castActivity = this;
+    private String title = "";
     /**
      * Initializes MediaRouter information and prepares for Cast device detection upon creating
      * this activity.
@@ -131,10 +139,18 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
 
         Intent intent = getIntent();
         String url = intent.getStringExtra("MEDIA_URL");
-        if (url.length()>0) {
-        	logVIfEnabled(TAG, "Passed in url=" + url);
-            this.mediaSelected(new CastMedia(url, url));
+        urls = intent.getStringArrayListExtra("MEDIA_URL_LIST");
+        if (urls==null || urls.size()==0) {
+        	urls = new ArrayList<String>();
+        	urls.add(url);
         }
+        title = intent.getStringExtra("MEDIA_TITLE");
+       
+    	if (title==null || title.isEmpty())
+    		title = urls.get(0);
+    	
+        this.mediaSelected(new CastMedia(title, urls.get(0)));
+        nextUrl++;
     }
 
     /**
@@ -529,7 +545,7 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         //logVIfEnabled(TAG, "updateStatus");
         this.runOnUiThread(new Runnable() {
             @Override
-            public void run() {
+            public void run() {            	
                 try {
                     setMediaRouteButtonVisible();
                     updateCurrentlyPlaying();
@@ -549,6 +565,15 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
                                 + (mMessageStream.getVolume() * 100) + "%\n";
                         currentStatus += "requestStatus: " + mStatus.getType() + "\n";
                         mStatusText.setText(currentStatus);
+                        
+                        
+                        // continue playing next url
+                        if (nextUrl<urls.size() && mMessageStream.getStreamPosition() == mMessageStream.getStreamDuration()) {
+                        	nextUrl++;
+                        	castActivity.mediaSelected(new CastMedia(title + "part " + nextUrl, urls.get(nextUrl)));
+                        	
+                        	Toast.makeText(castActivity.getApplicationContext(), "Auto play next part", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         mStatusText.setText(getResources().getString(R.string.tap_icon));
                     }
@@ -597,7 +622,7 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     updateStatus();
-                    Thread.sleep(1500);
+                    Thread.sleep(3000);
                 } catch (Exception e) {
                     Log.e(TAG, "Thread interrupted: " + e);
                 }
