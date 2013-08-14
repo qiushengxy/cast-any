@@ -492,12 +492,14 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         mPlayPauseButton.setEnabled(true);
         mStopButton.setEnabled(true);
         try {
-            logVIfEnabled(TAG, "Starting session with app id " + getString(R.string.app_id));
-
             // TODO: To run your own copy of the receiver, you will need to set
             // app_name in
             // /res/strings.xml to your own appID, and then upload the provided
             // receiver
+            logVIfEnabled(TAG, "Starting session with app id " + getString(R.string.app_id));
+            
+            // TODO: To run your own copy of the receiver, you will need to set app_name in 
+            // /res/strings.xml to your own appID, and then upload the provided receiver 
             // to the url that you whitelisted for your app.
             // The current value of app_name is "YOUR_APP_ID_HERE".
             mSession.startSession(getString(R.string.app_id));
