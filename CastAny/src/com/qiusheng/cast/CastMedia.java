@@ -25,7 +25,8 @@ public class CastMedia {
     private String mVideoUrl;
 
     /**
-     * Creates a new CastMedia object for the media with the given title and URL.
+     * Creates a new CastMedia object for the media with the given title and
+     * URL.
      */
     public CastMedia(String title, String videoUrl) {
         mTitle = title;

@@ -27,16 +27,17 @@ import com.qiusheng.cast.CastActivity;
 import com.qiusheng.cast.R;
 
 /**
- * A sample class which demonstrates handling of basic playback controls. Note that this dialog
- * must be created within a CastSampleActivity.
+ * A sample class which demonstrates handling of basic playback controls. Note
+ * that this dialog must be created within a CastSampleActivity.
  */
-public class SampleMediaRouteControllerDialog extends MediaRouteControllerDialog
-        implements View.OnClickListener {
+public class SampleMediaRouteControllerDialog extends MediaRouteControllerDialog implements
+        View.OnClickListener {
 
-    //private static final String TAG = SampleMediaRouteControllerDialog.class.getSimpleName();
+    // private static final String TAG =
+    // SampleMediaRouteControllerDialog.class.getSimpleName();
     private static final int SEEK_FORWARD = 1;
     private static final int SEEK_BACK = 2;
-    
+
     private CastActivity mActivity;
     private Button mBackButton;
     private Button mMuteButton;
@@ -50,7 +51,8 @@ public class SampleMediaRouteControllerDialog extends MediaRouteControllerDialog
     }
 
     /**
-     * Initializes this dialog's set of playback buttons and adds click listeners.
+     * Initializes this dialog's set of playback buttons and adds click
+     * listeners.
      */
     @Override
     public View onCreateMediaControlView(Bundle savedInstanceState) {
@@ -67,23 +69,24 @@ public class SampleMediaRouteControllerDialog extends MediaRouteControllerDialog
         mActivity = (CastActivity) getOwnerActivity();
         return controls;
     }
-    
+
     /**
-     * Receives click events on this dialog's playback buttons, and depending on the button clicked,
-     * calls the parent CastSampleActivity's onSeekClicked or onMuteClicked functions.
+     * Receives click events on this dialog's playback buttons, and depending on
+     * the button clicked, calls the parent CastSampleActivity's onSeekClicked
+     * or onMuteClicked functions.
      */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.skip_back_button:
-                mActivity.onSeekClicked(SEEK_BACK);
-                break;
-            case R.id.mute_button:
-                mActivity.onMuteClicked();
-                break;
-            case R.id.skip_forward_button:
-                mActivity.onSeekClicked(SEEK_FORWARD);
-                break;
+        case R.id.skip_back_button:
+            mActivity.onSeekClicked(SEEK_BACK);
+            break;
+        case R.id.mute_button:
+            mActivity.onMuteClicked();
+            break;
+        case R.id.skip_forward_button:
+            mActivity.onSeekClicked(SEEK_FORWARD);
+            break;
         }
     }
 }

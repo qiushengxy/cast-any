@@ -12,9 +12,20 @@
     </TextView>
 
     <ListView
-        android:id="@+id/file_list_view"
+        android:id="@android:id/list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/current_url" />
+        android:layout_below="@+id/current_url" 
+        android:layout_above="@+id/cast_selected" />
+    
+    <Button
+        android:id="@+id/cast_selected"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:textSize="20sp"
+        android:text="Cast Selected Medias" />
+
 
 </RelativeLayout>

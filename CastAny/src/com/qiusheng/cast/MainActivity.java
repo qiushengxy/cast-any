@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MainActivity  extends Activity {
+public class MainActivity extends Activity {
     private Button buttonHttp;
     private Button buttonQQ;
     private Button buttonYouku;
     private Button buttonTudou;
     private Button buttonSohu;
-    
+
     private Context context;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -30,7 +31,7 @@ public class MainActivity  extends Activity {
         buttonYouku = (Button) this.findViewById(R.id.button_youku);
         buttonTudou = (Button) this.findViewById(R.id.button_tudou);
         buttonSohu = (Button) this.findViewById(R.id.button_sohu);
-        
+
         buttonHttp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +41,7 @@ public class MainActivity  extends Activity {
                 context.startActivity(intent);
             }
         });
-        
+
         buttonQQ.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +52,7 @@ public class MainActivity  extends Activity {
                 context.startActivity(intent);
             }
         });
-        
+
         buttonYouku.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +63,7 @@ public class MainActivity  extends Activity {
                 context.startActivity(intent);
             }
         });
-        
+
         buttonTudou.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +74,7 @@ public class MainActivity  extends Activity {
                 context.startActivity(intent);
             }
         });
-        
+
         buttonSohu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

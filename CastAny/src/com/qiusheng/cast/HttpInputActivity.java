@@ -10,14 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class HttpInputActivity  extends Activity {
-    
+public class HttpInputActivity extends Activity {
+
     private Button buttonConnect;
     private EditText editServer;
     private EditText editUsername;
     private EditText editPassword;
-    
+
     private Context context;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http_input);
@@ -31,13 +32,14 @@ public class HttpInputActivity  extends Activity {
         editServer = (EditText) this.findViewById(R.id.editText_http_server);
         editUsername = (EditText) this.findViewById(R.id.editText_http_username);
         editPassword = (EditText) this.findViewById(R.id.editText_http_password);
-        
+
         buttonConnect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String server = editServer.getText().toString();
                 if (server.length() < 1) {
-                    Toast.makeText(context, "Server address is mandotory", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Server address is mandotory", Toast.LENGTH_SHORT)
+                            .show();
                 } else {
                     // start HTTPActivity
                     Intent intent = new Intent(context, HttpActivity.class);

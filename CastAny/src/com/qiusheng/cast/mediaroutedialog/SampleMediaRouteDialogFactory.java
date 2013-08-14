@@ -19,13 +19,14 @@ package com.qiusheng.cast.mediaroutedialog;
 import android.support.v7.app.MediaRouteDialogFactory;
 
 /**
- * An extension of MediaRouteDialogFactory that can be used to create a new 
+ * An extension of MediaRouteDialogFactory that can be used to create a new
  * SampleMediaRouteControllerDialogFragment.
  */
 public class SampleMediaRouteDialogFactory extends MediaRouteDialogFactory {
-    
-    //private static final String TAG = SampleMediaRouteDialogFactory.class.getSimpleName();
-    
+
+    // private static final String TAG =
+    // SampleMediaRouteDialogFactory.class.getSimpleName();
+
     private static final SampleMediaRouteDialogFactory sDefault = new SampleMediaRouteDialogFactory();
 
     /**

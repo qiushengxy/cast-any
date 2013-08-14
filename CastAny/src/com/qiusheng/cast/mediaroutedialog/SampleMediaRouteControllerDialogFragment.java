@@ -21,12 +21,13 @@ import android.os.Bundle;
 import android.support.v7.app.MediaRouteControllerDialogFragment;
 
 /**
- * An extension of MediaRouteControllerDialogFragment which contains a 
+ * An extension of MediaRouteControllerDialogFragment which contains a
  * SampleMediaRouteControllerDialog.
  */
 public class SampleMediaRouteControllerDialogFragment extends MediaRouteControllerDialogFragment {
 
-    //private static final String TAG = SampleMediaRouteControllerDialogFragment.class.getSimpleName();
+    // private static final String TAG =
+    // SampleMediaRouteControllerDialogFragment.class.getSimpleName();
 
     private SampleMediaRouteControllerDialog mSampleControllerDialog;
 
@@ -35,8 +36,8 @@ public class SampleMediaRouteControllerDialogFragment extends MediaRouteControll
     }
 
     @Override
-    public SampleMediaRouteControllerDialog onCreateControllerDialog(
-            Context context, Bundle savedInstanceState)  {
+    public SampleMediaRouteControllerDialog onCreateControllerDialog(Context context,
+            Bundle savedInstanceState) {
         mSampleControllerDialog = new SampleMediaRouteControllerDialog(context);
         mSampleControllerDialog.setVolumeControlEnabled(false);
         return mSampleControllerDialog;

@@ -42,7 +42,6 @@ import com.google.cast.CastDevice;
 import com.google.cast.ContentMetadata;
 import com.google.cast.MediaProtocolCommand;
 import com.google.cast.MediaProtocolMessageStream;
-import com.google.cast.MediaProtocolMessageStream.PlayerState;
 import com.google.cast.MediaRouteAdapter;
 import com.google.cast.MediaRouteHelper;
 import com.google.cast.MediaRouteStateChangeListener;
@@ -50,13 +49,13 @@ import com.google.cast.SessionError;
 import com.qiusheng.cast.mediaroutedialog.SampleMediaRouteDialogFactory;
 
 /***
- * An activity that plays a chosen sample video on a Cast device and exposes playback and volume
- * controls in the UI.
+ * An activity that plays a chosen sample video on a Cast device and exposes
+ * playback and volume controls in the UI.
  */
 public class CastActivity extends FragmentActivity implements MediaRouteAdapter {
 
     private static final String TAG = CastActivity.class.getSimpleName();
-    
+
     public static final boolean ENABLE_LOGV = true;
 
     protected static final double MAX_VOLUME_LEVEL = 20;
@@ -95,9 +94,10 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     private int nextUrl = 0;
     private CastActivity castActivity = this;
     private String title = "";
+
     /**
-     * Initializes MediaRouter information and prepares for Cast device detection upon creating
-     * this activity.
+     * Initializes MediaRouter information and prepares for Cast device
+     * detection upon creating this activity.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,21 +134,19 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         myThread = new Thread(runnable);
         logVIfEnabled(TAG, "Starting statusRunner thread");
         myThread.start();
-        
-        
 
         Intent intent = getIntent();
         String url = intent.getStringExtra("MEDIA_URL");
         urls = intent.getStringArrayListExtra("MEDIA_URL_LIST");
-        if (urls==null || urls.size()==0) {
-        	urls = new ArrayList<String>();
-        	urls.add(url);
+        if (urls == null || urls.size() == 0) {
+            urls = new ArrayList<String>();
+            urls.add(url);
         }
         title = intent.getStringExtra("MEDIA_TITLE");
-       
-    	if (title==null || title.isEmpty())
-    		title = urls.get(0);
-    	
+
+        if (title == null || title.isEmpty())
+            title = urls.get(0);
+
         this.mediaSelected(new CastMedia(title, urls.get(0)));
         nextUrl++;
     }
@@ -182,8 +180,11 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Skips forward or backward by some fixed increment in the currently playing media.
-     * @param direction an integer corresponding to either SEEK_FORWARD or SEEK_BACK
+     * Skips forward or backward by some fixed increment in the currently
+     * playing media.
+     * 
+     * @param direction
+     *            an integer corresponding to either SEEK_FORWARD or SEEK_BACK
      */
     public void onSeekClicked(int direction) {
         try {
@@ -205,7 +206,8 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Handles stopping the currently playing media upon the stop button being pressed.
+     * Handles stopping the currently playing media upon the stop button being
+     * pressed.
      */
     public void onStopClicked() {
         try {
@@ -242,9 +244,13 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Plays or pauses the currently loaded media, depending on the current state of the <code>
+     * Plays or pauses the currently loaded media, depending on the current
+     * state of the <code>
      * mPlayPauseButton</code>.
-     * @param playState indicates that Play was clicked if true, and Pause was clicked if false
+     * 
+     * @param playState
+     *            indicates that Play was clicked if true, and Pause was clicked
+     *            if false
      */
     public void onPlayClicked(boolean playState) {
         if (playState) {
@@ -309,46 +315,47 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Processes volume up and volume down actions upon receiving them as key events.
+     * Processes volume up and volume down actions upon receiving them as key
+     * events.
      */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int action = event.getAction();
         int keyCode = event.getKeyCode();
         switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                if (action == KeyEvent.ACTION_DOWN) {
-                    double currentVolume;
-                    if (mMessageStream != null) {
-                        currentVolume = mMessageStream.getVolume();
-                        logVIfEnabled(TAG, "Volume up from " + currentVolume);
-                        if (currentVolume < 1.0) {
-                            logVIfEnabled(TAG, "New volume: " + (currentVolume + VOLUME_INCREMENT));
-                            onSetVolume(currentVolume + VOLUME_INCREMENT);
-                        }
-                    } else {
-                        Log.e(TAG, "dispatchKeyEvent - volume up - mMessageStream==null");
+        case KeyEvent.KEYCODE_VOLUME_UP:
+            if (action == KeyEvent.ACTION_DOWN) {
+                double currentVolume;
+                if (mMessageStream != null) {
+                    currentVolume = mMessageStream.getVolume();
+                    logVIfEnabled(TAG, "Volume up from " + currentVolume);
+                    if (currentVolume < 1.0) {
+                        logVIfEnabled(TAG, "New volume: " + (currentVolume + VOLUME_INCREMENT));
+                        onSetVolume(currentVolume + VOLUME_INCREMENT);
                     }
+                } else {
+                    Log.e(TAG, "dispatchKeyEvent - volume up - mMessageStream==null");
                 }
+            }
 
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (action == KeyEvent.ACTION_DOWN) {
-                    double currentVolume;
-                    if (mMessageStream != null) {
-                        currentVolume = mMessageStream.getVolume();
-                        logVIfEnabled(TAG, "Volume down from: " + currentVolume);
-                        if (currentVolume > 0.0) {
-                            logVIfEnabled(TAG, "New volume: " + (currentVolume - VOLUME_INCREMENT));
-                            onSetVolume(currentVolume - VOLUME_INCREMENT);
-                        }
-                    } else {
-                        Log.e(TAG, "dispatchKeyEvent - volume down - mMessageStream==null");
+            return true;
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+            if (action == KeyEvent.ACTION_DOWN) {
+                double currentVolume;
+                if (mMessageStream != null) {
+                    currentVolume = mMessageStream.getVolume();
+                    logVIfEnabled(TAG, "Volume down from: " + currentVolume);
+                    if (currentVolume > 0.0) {
+                        logVIfEnabled(TAG, "New volume: " + (currentVolume - VOLUME_INCREMENT));
+                        onSetVolume(currentVolume - VOLUME_INCREMENT);
                     }
+                } else {
+                    Log.e(TAG, "dispatchKeyEvent - volume down - mMessageStream==null");
                 }
-                return true;
-            default:
-                return super.dispatchKeyEvent(event);
+            }
+            return true;
+        default:
+            return super.dispatchKeyEvent(event);
         }
     }
 
@@ -383,17 +390,17 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
             }
         }
         mSession = null;
-        
+
         if (myThread.isAlive())
-        	myThread.interrupt();
-        
+            myThread.interrupt();
+
         super.onDestroy();
     }
 
     /**
-     * A callback class which listens for route select or unselect events and processes devices
-     * and sessions accordingly.
-     */   
+     * A callback class which listens for route select or unselect events and
+     * processes devices and sessions accordingly.
+     */
     private class MyMediaRouterCallback extends MediaRouter.Callback {
         @Override
         public void onRouteSelected(MediaRouter router, RouteInfo route) {
@@ -423,20 +430,25 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Starts a new video playback session with the current CastContext and selected device.
+     * Starts a new video playback session with the current CastContext and
+     * selected device.
      */
     private void openSession() {
         logVIfEnabled(TAG, "openSession");
         mSession = new ApplicationSession(mCastContext, mSelectedDevice);
 
-        // TODO: The below lines allow you to specify either that your application uses the default
-        // implementations of the Notification and Lock Screens, or that you will be using your own.
+        // TODO: The below lines allow you to specify either that your
+        // application uses the default
+        // implementations of the Notification and Lock Screens, or that you
+        // will be using your own.
         int flags = 0;
 
-        // Comment out the below line if you are not writing your own Notification Screen.
+        // Comment out the below line if you are not writing your own
+        // Notification Screen.
         // flags |= ApplicationSession.FLAG_DISABLE_NOTIFICATION;
 
-        // Comment out the below line if you are not writing your own Lock Screen.
+        // Comment out the below line if you are not writing your own Lock
+        // Screen.
         // flags |= ApplicationSession.FLAG_DISABLE_LOCK_SCREEN_REMOTE_CONTROL;
         mSession.setApplicationOptions(flags);
 
@@ -480,20 +492,23 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         mPlayPauseButton.setEnabled(true);
         mStopButton.setEnabled(true);
         try {
-            logVIfEnabled(TAG, "Starting session with app name " + getString(R.string.app_name));
-            
-            // TODO: To run your own copy of the receiver, you will need to set app_name in 
-            // /res/strings.xml to your own appID, and then upload the provided receiver 
+            logVIfEnabled(TAG, "Starting session with app id " + getString(R.string.app_id));
+
+            // TODO: To run your own copy of the receiver, you will need to set
+            // app_name in
+            // /res/strings.xml to your own appID, and then upload the provided
+            // receiver
             // to the url that you whitelisted for your app.
             // The current value of app_name is "YOUR_APP_ID_HERE".
-            mSession.startSession(getString(R.string.app_name));
+            mSession.startSession(getString(R.string.app_id));
         } catch (IOException e) {
             Log.e(TAG, "Failed to open session", e);
         }
     }
 
     /**
-     * Loads the stored media object and casts it to the currently selected device.
+     * Loads the stored media object and casts it to the currently selected
+     * device.
      */
     protected void loadMedia() {
         logVIfEnabled(TAG, "Loading selected media on device");
@@ -530,8 +545,8 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
         logVIfEnabled(TAG, "mediaSelected");
         this.mMedia = media;
         updateCurrentlyPlaying();
-        if (mSelectedDevice!=null) {
-        	openSession();
+        if (mSelectedDevice != null) {
+            openSession();
         }
         if (mMessageStream != null) {
             loadMedia();
@@ -539,13 +554,14 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Updates the status of the currently playing video in the dedicated message view.
+     * Updates the status of the currently playing video in the dedicated
+     * message view.
      */
     public void updateStatus() {
-        //logVIfEnabled(TAG, "updateStatus");
+        // logVIfEnabled(TAG, "updateStatus");
         this.runOnUiThread(new Runnable() {
             @Override
-            public void run() {            	
+            public void run() {
                 try {
                     setMediaRouteButtonVisible();
                     updateCurrentlyPlaying();
@@ -553,26 +569,28 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
                     if (mMessageStream != null) {
                         mStatus = mMessageStream.requestStatus();
 
-                        String currentStatus = "Player State: "
-                                + mMessageStream.getPlayerState() + "\n";
+                        String currentStatus = "Player State: " + mMessageStream.getPlayerState()
+                                + "\n";
                         currentStatus += "Device " + mSelectedDevice.getFriendlyName() + "\n";
                         currentStatus += "Title " + mMessageStream.getTitle() + "\n";
-                        currentStatus += "Current Position: "
-                                + mMessageStream.getStreamPosition() + "\n";
-                        currentStatus += "Duration: "
-                                + mMessageStream.getStreamDuration() + "\n";
-                        currentStatus += "Volume set at: "
-                                + (mMessageStream.getVolume() * 100) + "%\n";
+                        currentStatus += "Current Position: " + mMessageStream.getStreamPosition()
+                                + "\n";
+                        currentStatus += "Duration: " + mMessageStream.getStreamDuration() + "\n";
+                        currentStatus += "Volume set at: " + (mMessageStream.getVolume() * 100)
+                                + "%\n";
                         currentStatus += "requestStatus: " + mStatus.getType() + "\n";
                         mStatusText.setText(currentStatus);
-                        
-                        
+
                         // continue playing next url
-                        if (nextUrl<urls.size() && mMessageStream.getStreamPosition() == mMessageStream.getStreamDuration()) {
-                        	nextUrl++;
-                        	castActivity.mediaSelected(new CastMedia(title + "part " + nextUrl, urls.get(nextUrl)));
-                        	
-                        	Toast.makeText(castActivity.getApplicationContext(), "Auto play next part", Toast.LENGTH_LONG).show();
+                        if (nextUrl < urls.size()
+                                && mMessageStream.getStreamPosition() == mMessageStream
+                                        .getStreamDuration()) {
+                            nextUrl++;
+                            castActivity.mediaSelected(new CastMedia(title + "part " + nextUrl,
+                                    urls.get(nextUrl)));
+
+                            Toast.makeText(castActivity.getApplicationContext(),
+                                    "Auto play next part", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         mStatusText.setText(getResources().getString(R.string.tap_icon));
@@ -585,19 +603,20 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * Sets the Cast Device Selection button to visible or not, depending on the availability of
-     * devices.
+     * Sets the Cast Device Selection button to visible or not, depending on the
+     * availability of devices.
      */
     protected final void setMediaRouteButtonVisible() {
-        mMediaRouteButton.setVisibility(
-                mMediaRouter.isRouteAvailable(mMediaRouteSelector, 0) ? View.VISIBLE : View.GONE);
+        mMediaRouteButton
+                .setVisibility(mMediaRouter.isRouteAvailable(mMediaRouteSelector, 0) ? View.VISIBLE
+                        : View.GONE);
     }
 
     /**
      * Updates a view with the title of the currently playing media.
      */
     protected void updateCurrentlyPlaying() {
-        //logVIfEnabled(TAG, "updateCurrentlyPlaying");
+        // logVIfEnabled(TAG, "updateCurrentlyPlaying");
         String playing = "";
         if (mMedia.getTitle() != null) {
             playing = "Media Selected: " + mMedia.getTitle();
@@ -614,7 +633,8 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
     }
 
     /**
-     * A Runnable class that updates a view to display status for the currently playing media.
+     * A Runnable class that updates a view to display status for the currently
+     * playing media.
      */
     private class StatusRunner implements Runnable {
         @Override
@@ -629,12 +649,13 @@ public class CastActivity extends FragmentActivity implements MediaRouteAdapter 
             }
         }
     }
-    
+
     /**
-     * Logs in verbose mode with the given tag and message, if the LOCAL_LOGV tag is set.
+     * Logs in verbose mode with the given tag and message, if the LOCAL_LOGV
+     * tag is set.
      */
-    private void logVIfEnabled(String tag, String message){
-        if(ENABLE_LOGV){
+    private void logVIfEnabled(String tag, String message) {
+        if (ENABLE_LOGV) {
             Log.v(tag, message);
         }
     }
